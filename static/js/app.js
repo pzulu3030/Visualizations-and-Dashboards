@@ -4,12 +4,15 @@ function getDemoInfo(id_number) {
   // console.log(id);
   d3.json("samples.json").then((data) => {
     metadata = data.metadata;
+    // console.log(metadata);
     result = metadata.filter((meta) => meta.id.toString() === id_number)[0];
-    console.log(result);
+    // console.log(result);
+    // result1 = metadata.filter((meta) => meta.id.toString() === id_number);
+    // console.log(result1);
 
     let demographicInfo = d3.select("#sample-metadata");
     demographicInfo.html("");
-
+    // to display list of values for subject id
     Object.entries(result).forEach((key) => {
       demographicInfo.append("h5").text(key[0] + ": " + key[1] + "\n");
     });
@@ -24,10 +27,10 @@ function plotCharts(id_number) {
     //console.log(data);
     sampledata = data.samples;
     result = sampledata.filter((meta) => meta.id.toString() === id_number)[0];
-    //console.log(result);
+    console.log(result);
 
     let sampleValues = result.sample_values.slice(0, 10).reverse();
-    //console.log(sampleValues);
+    console.log(sampleValues);
     let labels = result.otu_labels.slice(0, 10);
     // console.log(labels);
     let top10_otu = result.otu_ids.slice(0, 10).reverse();
@@ -51,15 +54,32 @@ function plotCharts(id_number) {
       yaxis: {
         tickmode: "linear",
       },
-      margin: {
-        l: 100,
-        r: 100,
-        t: 100,
-        b: 30,
-      },
+      // margin: {
+      //   l: 100,
+      //   r: 100,
+      //   t: 100,
+      //   b: 30,
+      // },
     };
-
     Plotly.newPlot("bar", data, layout);
+    // Create bubble chart
+    let trace1 = {
+      x: top10_otu,
+      y: sampleValues,
+      mode: "markers",
+      marker: {
+        size: sampleValues,
+        color: top10_otu,
+      },
+      text: labels,
+    };
+    let layout2 = {
+      xaxis: { title: "OTU ID" },
+      height: 600,
+      width: 1000,
+    };
+    let data1 = [trace1];
+    Plotly.newPlot("bubble", data1, layout2);
   });
 }
 //Initialize the display page
