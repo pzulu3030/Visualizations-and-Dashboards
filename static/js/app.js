@@ -122,19 +122,6 @@ function buildGauge(wfreq) {
         "#85B48A",
         "white",
       ],
-      labels: [
-        "0-1",
-        "1-2",
-        "2-3",
-        "3-4",
-        "4-5",
-        "5-6",
-        "6-7",
-        "7-8",
-        "8-9",
-        "",
-      ],
-      hoverinfo: "label",
     },
     hoverinfo: "skip",
   };
@@ -152,12 +139,10 @@ function buildGauge(wfreq) {
     hoverinfo: "skip",
   };
 
-  // the needle (triangular version)
-
-  // add weights to the degrees to correct needle
+  // the needle (triangular version) add weights to the degrees to correct needle
   let weight = 0;
   if (wfreq == 2 || wfreq == 3) {
-    weight = 3;
+    weight = 5;
   } else if (wfreq == 4) {
     weight = 1;
   } else if (wfreq == 5) {
@@ -165,7 +150,7 @@ function buildGauge(wfreq) {
   } else if (wfreq == 6) {
     weight = -2;
   } else if (wfreq == 7) {
-    weight = -3;
+    weight = -5;
   }
 
   let degrees = 180 - (20 * wfreq + weight); // 20 degrees for each of the 9 gauge sections
@@ -187,16 +172,6 @@ function buildGauge(wfreq) {
   console.log(path);
   let gaugeLayout = {
     title: "<b>Belly Button Washing Frequency</b><br>Scrubs per Week",
-    shapes: [
-      {
-        type: "path",
-        path: path,
-        fillcolor: "#850000",
-        line: {
-          color: "red",
-        },
-      },
-    ],
     xaxis: {
       zeroline: false,
       showticklabels: false,
@@ -211,6 +186,16 @@ function buildGauge(wfreq) {
       range: [-1, 1],
       fixedrange: true,
     },
+    shapes: [
+      {
+        type: "path",
+        path: path,
+        fillcolor: "#850000",
+        line: {
+          color: "red",
+        },
+      },
+    ],
   };
 
   Plotly.newPlot("gauge", [traceGauge, dot], gaugeLayout);
